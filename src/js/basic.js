@@ -1,3 +1,18 @@
-export default function templateFunc(param) {
-  return param;
+export default class Validator {
+  // Если второй параметр задать true, то при не корректном имени метод вернет поясняющее сообщение,
+  // иначе - false
+  static validateUsername(nameParam, message = false) {
+    let name = nameParam;
+    if (/^[\d|_|-]/.test(name) || /[\d|_|-]$/.test(name)) return message ? 'Имя не должно начинаться и заканчиваться цифрами, символами подчёркивания или тире' : false;
+
+    name = name.replace(/-/g, 'q'); // Убираем разрешенное тире и заменяем его на символ, чтоб случайно не получить четыре цифры подряд.
+
+    // Так как тире в разрешенном месте убрано, можно воспользоваться
+    // простым выражением на допустимые символы, которое не разрешает тире.
+    if (/\W/.test(name)) return message ? 'Допустимы только латинские буквы, символы тире -, подчёркивания _ и цифры (0-9)' : false;
+
+    if (/\d{4}/.test(name)) return message ? 'Имя не должно содержать подряд более трёх цифр' : false;
+
+    return message ? 'ok' : true;
+  }
 }
